@@ -70,7 +70,7 @@ public class Order implements Serializable {
 		this.orderStatus = orderStatus.getCode();
 		}
 	}
-
+	
 	public User getClient() {
 		return client;
 	}
