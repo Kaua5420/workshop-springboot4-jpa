@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Profile;
 
 import br.com.dev.web_services_shop.entities.Category;
 import br.com.dev.web_services_shop.entities.Order;
+import br.com.dev.web_services_shop.entities.OrderItem;
 import br.com.dev.web_services_shop.entities.Product;
 import br.com.dev.web_services_shop.entities.User;
 import br.com.dev.web_services_shop.entities.enums.OrderStatus;
 import br.com.dev.web_services_shop.repositories.CategoryRepository;
+import br.com.dev.web_services_shop.repositories.OrderItemRepository;
 import br.com.dev.web_services_shop.repositories.OrderRepository;
 import br.com.dev.web_services_shop.repositories.ProductRepository;
 import br.com.dev.web_services_shop.repositories.UserRepository;
@@ -25,12 +27,14 @@ public class TestConfig implements CommandLineRunner {
 	private final OrderRepository orderRepository;
 	private final CategoryRepository categoryRepository;
 	private final ProductRepository productRepository;
+	private final OrderItemRepository orderItemRepository;
 
-	TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository, ProductRepository productRepository) {
+	TestConfig(UserRepository userRepository, OrderRepository orderRepository, CategoryRepository categoryRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository) {
 		this.userRepository = userRepository;
 		this.orderRepository = orderRepository;
 		this.categoryRepository = categoryRepository;
 		this.productRepository = productRepository;
+		this.orderItemRepository = orderItemRepository;
 	}
 	
 
@@ -66,6 +70,13 @@ public class TestConfig implements CommandLineRunner {
 		p5.getCategories().add(cat2);
 		
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice()); 
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice()); 
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice()); 
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice()); 
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 	}
 	
 	
