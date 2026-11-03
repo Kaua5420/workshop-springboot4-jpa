@@ -3,10 +3,12 @@ package br.com.dev.web_services_shop.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.dev.web_services_shop.entities.User;
 import br.com.dev.web_services_shop.repositories.UserRepository;
+import br.com.dev.web_services_shop.services.exceptions.DatabaseException;
 import br.com.dev.web_services_shop.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -32,7 +34,15 @@ public class UserService {
 	}
 	
 	public void delete(Long id) {
+		if (!repository.existsById(id)) {
+			throw new ResourceNotFoundException(id);
+		}
+		try {
 		repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		
 	}
 	
 	public User update(Long id, User obj) {
