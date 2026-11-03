@@ -10,6 +10,7 @@ import br.com.dev.web_services_shop.entities.User;
 import br.com.dev.web_services_shop.repositories.UserRepository;
 import br.com.dev.web_services_shop.services.exceptions.DatabaseException;
 import br.com.dev.web_services_shop.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -42,13 +43,16 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
-		
 	}
 	
 	public User update(Long id, User obj) {
+		try {
 		User entity = repository.getReferenceById(id);
 		updateData(entity, obj);
 		return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
